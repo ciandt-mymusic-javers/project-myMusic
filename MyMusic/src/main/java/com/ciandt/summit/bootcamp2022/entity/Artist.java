@@ -17,6 +17,7 @@ import java.io.Serializable;
 
 public class Artist implements Serializable {
 
+
     @Id
     @Column(name = "Id")
     @NonNull
@@ -25,6 +26,4 @@ public class Artist implements Serializable {
     @Column(name = "Nome")
     @NonNull
     private String name;
-
-
 }
