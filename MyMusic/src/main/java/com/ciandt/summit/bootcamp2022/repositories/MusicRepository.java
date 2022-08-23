@@ -12,16 +12,9 @@ import java.util.Set;
 
 @Repository
 public interface MusicRepository extends JpaRepository<Music, String> {
-    @Query(value = "SELECT * FROM MUSICAS M JOIN ARTISTAS A ON A.ID = M.ARTISTAID WHERE A.NOME " +
-            "LIKE '%'|| :name ||'%' OR M.NOME LIKE '%'|| :name ||'%' " +
-            "ORDER BY LOWER(A.NOME), LOWER(M.NOME) ASC", nativeQuery = true)
-    Set<Music> findMusicsByMusicsAndArtistsName(@Param("name") String name);
-
-    @Query(value = "SELECT * FROM MUSICAS M " +
-            "JOIN ARTISTAS A ON A.ID = M.ARTISTAID " +
-            "JOIN PLAYLISTMUSICAS P ON P.MUSICAID = M.ID " +
-            "WHERE P.PLAYLISTID = :playlistId " +
-            "ORDER BY LOWER(A.NOME), LOWER(M.NOME) ASC", nativeQuery = true)
-    Set<Music> findMusicsByPlaylistId(@Param("playlistId") String playlistId);
+    @Query(value = "SELECT m FROM Music m WHERE m.name " +
+            "like %:name% OR m.artist.name like %:name% " +
+            "ORDER BY LOWER(m.name), LOWER(m.artist.name) ASC")
+    Set<Music> findMusicsByNameOrArtists(@Param("name") String name);
 
 }
