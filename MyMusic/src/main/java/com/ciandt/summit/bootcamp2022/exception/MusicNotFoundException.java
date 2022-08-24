@@ -5,8 +5,4 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NO_CONTENT)
 public class MusicNotFoundException extends RuntimeException {
-
-    public MusicNotFoundException(String message){
-        super(message);
-    }
 }
