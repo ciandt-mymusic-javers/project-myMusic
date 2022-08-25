@@ -26,6 +26,4 @@ public class MusicController {
     public ResponseEntity<Set<Music>> findMusicsByNameOrArtists(@RequestParam String filter) {
         return new ResponseEntity<>(musicService.findMusicsByNameOrArtists(String.valueOf(filter)), HttpStatus.OK);
     }
-
-
 }
