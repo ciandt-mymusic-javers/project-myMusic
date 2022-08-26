@@ -43,7 +43,7 @@ class MusicServiceTest {
 
     @ParameterizedTest(name = "{index} - \"{0}\" does not have " + MusicService.MINIMUM_LENGTH + " or more characters")
     @ValueSource(strings = {"A", "a", " ", ""})
-    void NotEnoughNameLengthTest(String filter) {
+    void findMusicsByNameOrArtistsShouldReturnInvalidFilterSizeExceptionWhenFilterSizeIsInvalid(String filter) {
         Exception exception = assertThrows(
                 InvalidFilterSizeException.class, () -> musicService.findMusicsByNameOrArtists(filter)
         );
@@ -55,14 +55,14 @@ class MusicServiceTest {
 
     @ParameterizedTest(name = "{index} - \"{0}\" have " + MusicService.MINIMUM_LENGTH + " or more characters")
     @ValueSource(strings = {"bea", "U2", "Bruno Mars"})
-    void EnoughNameLengthTest(String filter) {
+    void findMusicsByNameOrArtistsShouldReturnMusicsWhenFilterSizeIsValid(String filter) {
         when(musicRepository.findMusicsByNameOrArtists(filter)).thenReturn(musics);
 
          assertDoesNotThrow(() -> musicService.findMusicsByNameOrArtists(filter));
     }
 
     @Test
-    void MusicNotFoundTest() {
+    void findMusicsByNameOrArtistsShouldReturnMusicNotFoundExceptionWhenMusicOrArtistNotFound() {
         when(musicRepository.findMusicsByNameOrArtists(anyString())).thenReturn(Collections.emptySet());
 
         Exception exception = assertThrows(
