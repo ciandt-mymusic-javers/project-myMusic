@@ -24,6 +24,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(MusicController.class)
@@ -51,9 +52,14 @@ public class MusicControllerTest {
         given(musicService.findMusicsByNameOrArtists("Nick")).willReturn(new HashSet<>(Collections.singletonList(music)));
 
         RequestBuilder request = get("/api/v1/music?filter=Nick");
-        MvcResult result = mvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-        assertEquals("[{\"id\":\"4ffb5d4f-8b7f-4996-b84b-ecf751f52eea\",\"name\":\"Photograph\",\"artist\":{\"id\":\"30ab1678-c616-4314-adcc-918aff5a7a13\",\"name\":\"Nickelback\"}}]",
-                result.getResponse().getContentAsString());
+        String body = "[{\"id\":\"4ffb5d4f-8b7f-4996-b84b-ecf751f52eea\"," +
+                "\"name\":\"Photograph\"," +
+                "\"artist\":{\"id\":\"30ab1678-c616-4314-adcc-918aff5a7a13\"," +
+                "\"name\":\"Nickelback\"}}]";
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content()
+                        .string(body)).andReturn();
     }
 
     @Test
@@ -63,7 +69,7 @@ public class MusicControllerTest {
         given(musicService.findMusicsByNameOrArtists("Sandy")).willThrow(new MusicNotFoundException());
 
         RequestBuilder request = get("/api/v1/music?filter=Sandy");
-        MvcResult result = mvc.perform(request).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
+        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
     }
 
     @Test
@@ -74,6 +80,6 @@ public class MusicControllerTest {
                 + MusicService.MINIMUM_LENGTH + " characters"));
 
         RequestBuilder request = get("/api/v1/music?filter=s");
-        MvcResult result = mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
     }
 }
