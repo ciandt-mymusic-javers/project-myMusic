@@ -5,9 +5,10 @@ import com.ciandt.summit.bootcamp2022.exception.InvalidFilterSizeException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class MusicService implements IMusicService{
@@ -17,13 +18,14 @@ public class MusicService implements IMusicService{
     private MusicRepository musicRepository;
 
     @Override
-    public Set<Music> findMusicsByNameOrArtists(String filter){
+    public Page<Music> findMusicsByNameOrArtists(String filter, int pageNumber, int pageSize){
         if(isNotEnoughNameLength(filter))
             throw new InvalidFilterSizeException(
                     "It is not possible to filter musics with word shorter than "
                             + MINIMUM_LENGTH + " characters");
 
-        Set<Music> musics = musicRepository.findMusicsByNameOrArtists(filter);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Music> musics = musicRepository.findMusicsByNameOrArtists(filter, pageable);
 
         if(musics.isEmpty())
             throw new MusicNotFoundException();
