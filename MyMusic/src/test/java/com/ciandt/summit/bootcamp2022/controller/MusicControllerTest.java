@@ -65,9 +65,10 @@ public class MusicControllerTest {
     @DisplayName("Not existing search with filter longer than 2 characters should return HTTP.StatusCode.NOTFOUND")
     void findMusicsByNameOrArtistsNotFound() throws Exception {
 
-        given(musicService.findMusicsByNameOrArtists("Sandy", 0, 10)).willThrow(new MusicNotFoundException());
+        given(musicService.findMusicsByNameOrArtists("Sandy", 0, 10))
+                .willThrow(new MusicNotFoundException());
 
-        RequestBuilder request = get("/api/v1/music?filter=Sandy");
+        RequestBuilder request = get("/api/v1/music?filter=Sandy&pageNumber=0&pageSize=10");
         mvc.perform(request).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
     }
 
@@ -75,10 +76,12 @@ public class MusicControllerTest {
     @DisplayName("Search with filter shorter than 2 characters should return HTTP.StatusCode.BADREQUEST")
     void findMusicsByNameOrArtistsInvalidFilter() throws Exception {
 
-        given(musicService.findMusicsByNameOrArtists("s", 0, 10)).willThrow(new InvalidFilterSizeException("It is not possible to filter musics with word shorter than "
-                + MusicService.MINIMUM_LENGTH + " characters"));
+        given(musicService.findMusicsByNameOrArtists("s", 0, 10))
+                .willThrow(new InvalidFilterSizeException(
+                        "It is not possible to filter musics with word shorter than "
+                                + MusicService.MINIMUM_LENGTH + " characters"));
 
-        RequestBuilder request = get("/api/v1/music?filter=s");
+        RequestBuilder request = get("/api/v1/music?filter=s&pageNumber=0&pageSize=10");
         mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
     }
 }

@@ -13,10 +13,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -30,7 +30,7 @@ class MusicServiceTest {
     @Mock
     private MusicRepository musicRepository;
 
-    private static Set<Music> musics;
+    private static List<Music> musics;
 
     private static Music m;
 
@@ -39,15 +39,15 @@ class MusicServiceTest {
         Artist artist = new Artist("30ab1678-c616-4314-adcc-918aff5a7a13", "M1");
         m = new Music("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "Leave the Door Open", artist);
 
-        musics = new HashSet<>();
+        musics = new ArrayList<>();
         musics.add(m);
     }
 
     @ParameterizedTest(name = "{index} - \"{0}\" does not have " + MusicService.MINIMUM_LENGTH + " or more characters")
     @ValueSource(strings = {"A", "a", " ", ""})
     void findMusicsByNameOrArtistsShouldReturnInvalidFilterSizeExceptionWhenFilterSizeIsInvalid(String filter) {
-        Exception exception = assertThrows(
-                InvalidFilterSizeException.class, () -> musicService.findMusicsByNameOrArtists(filter)
+        Exception exception = assertThrows(InvalidFilterSizeException.class,
+                () -> musicService.findMusicsByNameOrArtists(filter, 0, 10)
         );
 
         assertEquals(
@@ -58,17 +58,18 @@ class MusicServiceTest {
     @ParameterizedTest(name = "{index} - \"{0}\" have " + MusicService.MINIMUM_LENGTH + " or more characters")
     @ValueSource(strings = {"bea", "U2", "Bruno Mars"})
     void findMusicsByNameOrArtistsShouldReturnMusicsWhenFilterSizeIsValid(String filter) {
-        when(musicRepository.findMusicsByNameOrArtists(filter)).thenReturn(musics);
+        when(musicRepository.findMusicsByNameOrArtists(filter, PageRequest.of(0, 10)))
+                .thenReturn(new PageImpl<>(musics));
 
-         assertDoesNotThrow(() -> musicService.findMusicsByNameOrArtists(filter));
+         assertDoesNotThrow(() -> musicService.findMusicsByNameOrArtists(filter, 0 ,10));
     }
 
     @Test
     void findMusicsByNameOrArtistsShouldReturnMusicNotFoundExceptionWhenMusicOrArtistNotFound() {
-        when(musicRepository.findMusicsByNameOrArtists(anyString())).thenReturn(Collections.emptySet());
+        when(musicRepository.findMusicsByNameOrArtists(m.getName(), PageRequest.of(0, 10)))
+                .thenReturn(new PageImpl<>(Collections.emptyList()));
 
-        Exception exception = assertThrows(
-                MusicNotFoundException.class, () -> musicService.findMusicsByNameOrArtists(m.getName())
-        );
+        assertThrows(MusicNotFoundException.class, () ->
+                musicService.findMusicsByNameOrArtists(m.getName(), 0,10));
     }
 }
