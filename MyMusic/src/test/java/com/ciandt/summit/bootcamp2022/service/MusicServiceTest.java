@@ -1,5 +1,6 @@
 package com.ciandt.summit.bootcamp2022.service;
 
+import com.ciandt.summit.bootcamp2022.entity.Artist;
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.exception.InvalidFilterSizeException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundException;
@@ -35,7 +36,8 @@ class MusicServiceTest {
 
     @BeforeAll
     public static void init() {
-        m = new Music("M1", "Leave the Door Open");
+        Artist artist = new Artist("30ab1678-c616-4314-adcc-918aff5a7a13", "M1");
+        m = new Music("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "Leave the Door Open", artist);
 
         musics = new HashSet<>();
         musics.add(m);
