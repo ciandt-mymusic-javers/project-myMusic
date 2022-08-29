@@ -28,6 +28,7 @@ public class Music implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ArtistaId",
     referencedColumnName = "Id")
+    @NonNull
     private Artist artist;
 
 }
