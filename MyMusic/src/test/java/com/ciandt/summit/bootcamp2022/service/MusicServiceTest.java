@@ -68,7 +68,5 @@ class MusicServiceTest {
         Exception exception = assertThrows(
                 MusicNotFoundException.class, () -> musicService.findMusicsByNameOrArtists(m.getName())
         );
-
-        assertEquals("MusicNotFoundException", exception.getClass().getSimpleName());
     }
 }

@@ -31,7 +31,7 @@ public class MusicService implements IMusicService{
         return musics;
     }
 
-    public static boolean isNotEnoughNameLength(String filter) {
+    private boolean isNotEnoughNameLength(String filter) {
         return filter.length() < MINIMUM_LENGTH;
     }
 }
