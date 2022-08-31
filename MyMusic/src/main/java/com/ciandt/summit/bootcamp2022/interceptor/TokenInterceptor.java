@@ -25,8 +25,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
 
         try {
-            tokenProviderProxy.tokenAuthorizer(new CreateAuthorizerRequest(new CreateAuthorizerRequestData(name, token)))
-                    .getStatusCode();
+            tokenProviderProxy.tokenAuthorizer(new CreateAuthorizerRequest(new CreateAuthorizerRequestData(name, token)));
 
             return true;
 
