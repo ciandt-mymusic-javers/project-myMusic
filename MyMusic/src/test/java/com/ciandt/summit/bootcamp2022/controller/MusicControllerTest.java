@@ -4,11 +4,9 @@ import com.ciandt.summit.bootcamp2022.entity.Artist;
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.exception.InvalidFilterSizeException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundException;
+import com.ciandt.summit.bootcamp2022.interceptor.TokenInterceptor;
 import com.ciandt.summit.bootcamp2022.service.MusicService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -33,6 +32,9 @@ public class MusicControllerTest {
     @MockBean
     private MusicService musicService;
 
+    @MockBean
+    private TokenInterceptor tokenInterceptor;
+
     @Autowired
     private MockMvc mvc;
 
@@ -42,6 +44,12 @@ public class MusicControllerTest {
     public void init()  {
         Artist artist = new Artist("30ab1678-c616-4314-adcc-918aff5a7a13", "Nickelback");
         music = new Music("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "Photograph", artist);
+
+    }
+
+    @BeforeEach
+    void initTest() {
+        given(tokenInterceptor.preHandle(any(), any(), any())).willReturn(true);
     }
 
     @Test
