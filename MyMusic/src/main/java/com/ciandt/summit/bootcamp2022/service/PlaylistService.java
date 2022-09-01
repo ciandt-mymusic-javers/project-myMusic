@@ -6,8 +6,11 @@ import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
+@Service
 public class PlaylistService implements IPlaylistService {
     @Autowired
     private PlaylistRepository playlistRepository;
@@ -15,7 +18,7 @@ public class PlaylistService implements IPlaylistService {
     private MusicRepository musicRepository;
 
     @Override
-    public void addMusicIntoPlaylist(Music music, String playlistId) throws MusicOrPlaylistNotFoundException {
+    public void addMusicIntoPlaylist(Music music, String playlistId){
         Optional<Music> musicFound = musicRepository.findById(music.getId());
         if(!musicFound.isPresent())
             throw new MusicOrPlaylistNotFoundException("Music with id " + music.getId() + " not found");
