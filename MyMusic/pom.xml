@@ -65,6 +65,11 @@
 			<version>4.3.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.pitest</groupId>
+			<artifactId>pitest-junit5-plugin</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<!-- SWAGGER DEPENDENCY -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -118,6 +123,28 @@
 					</execution>
 				</executions>
 			</plugin>
-        </plugins>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.9.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-junit5-plugin</artifactId>
+						<version>1.0.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<targetClasses>
+						<param>com.ciandt.summit.bootcamp2022.service*</param>
+						<param>com.ciandt.summit.bootcamp2022.controller*</param>
+					</targetClasses>
+					<targetTests>
+						<param>com.ciandt.summit.bootcamp2022.service*</param>
+						<param>com.ciandt.summit.bootcamp2022.controller*</param>
+					</targetTests>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
