@@ -19,7 +19,7 @@ public class PlaylistService implements IPlaylistService {
     private MusicRepository musicRepository;
 
     @Override
-    public void addMusicIntoPlaylist(Music music, String playlistId){
+    public Playlist addMusicIntoPlaylist(Music music, String playlistId){
         Optional<Music> musicFound = musicRepository.findById(music.getId());
         if(!musicFound.isPresent()) {
             log.error("Music was not found.");
@@ -35,7 +35,7 @@ public class PlaylistService implements IPlaylistService {
             log.info("Music added into the playlist.");
             Playlist playlist =  playlistFound.get();
             playlist.getMusics().add(music);
-            playlistRepository.save(playlist);
+            return playlistRepository.save(playlist);
         }
     }
 }
