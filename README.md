@@ -1,4 +1,4 @@
-<h1 align="center"><a href="ciandt-mymusic-javers.herokuapp.com">🔗 MyMusic</a></h1>
+<h1 align="center"><a href="https://ciandt-mymusic-javers.herokuapp.com">🔗 MyMusic</a></h1>
 
 <p align="center">🚀 A new Spotify-like API that allows you to search for musics and artists as well as create new playlists</p>
 
