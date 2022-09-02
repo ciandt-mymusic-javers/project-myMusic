@@ -27,7 +27,7 @@ public class MusicController {
             @RequestParam String pageNumber,
             @RequestParam String pageSize) {
 
-        log.info("Endpoint to music search inicialized.");
+        log.info("Endpoint to music search initialized.");
 
         return new ResponseEntity<>(musicService.findMusicsByNameOrArtists(String.valueOf(filter),
                 Integer.parseInt(pageNumber), Integer.parseInt(pageSize)).getContent(), HttpStatus.OK);

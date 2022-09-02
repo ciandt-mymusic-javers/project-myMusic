@@ -26,8 +26,8 @@ public class PlaylistController {
                                                        @RequestBody @Valid Music music){
         playlistService.addMusicIntoPlaylist(music, playlistId);
 
-        log.info("Endpoint to add music into playlist inicialized.");
+        log.info("Endpoint to add music into playlist initialized.");
 
-        return new ResponseEntity<>("Music successfully insert into playlist", HttpStatus.CREATED);
+        return new ResponseEntity<>("Music successfully inserted into playlist", HttpStatus.CREATED);
     }
 }
