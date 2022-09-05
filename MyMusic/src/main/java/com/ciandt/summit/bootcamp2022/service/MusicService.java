@@ -21,9 +21,6 @@ public class MusicService implements IMusicService{
     @Autowired
     private MusicRepository musicRepository;
 
-    @Autowired
-    CacheManager cacheManager;
-
     @Override
     @Cacheable(value = "musicCache")
     public Page<Music> findMusicsByNameOrArtists(String filter, int pageNumber, int pageSize){
