@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/playlists")
+@RequestMapping("/api/v1/playlist")
 public class PlaylistController {
 
     @Autowired
