@@ -2,6 +2,7 @@ package com.ciandt.summit.bootcamp2022.service;
 
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
+import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
@@ -20,22 +21,42 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public Playlist addMusicIntoPlaylist(Music music, String playlistId){
-        Optional<Music> musicFound = musicRepository.findById(music.getId());
-        if(!musicFound.isPresent()) {
-            log.error("Music was not found.");
-            throw new MusicOrPlaylistNotFoundException("Music with id " + music.getId() + " not found");
-        }
+        isMusicExists(music);
 
+        Playlist playlist = isPlaylistExists(playlistId);
+        playlist.getMusics().add(music);
+
+        log.info("Music added into the playlist.");
+
+        return playlistRepository.save(playlist);
+    }
+
+    public Integer deleteMusicOfPlaylist(Music music, String playlistId) {
+        isMusicExists(music);
+
+        isPlaylistExists(playlistId);
+
+        String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, music.getId());
+        if (musicIdFound == null) {
+            throw new MusicNotFoundInsidePlaylistException("Music was not found inside playlist");
+        }
+        return playlistRepository.deleteMusicOfPlaylist(playlistId, music.getId());
+    }
+
+    private Playlist isPlaylistExists(String playlistId) {
         Optional<Playlist> playlistFound = playlistRepository.findById(playlistId);
         if(!playlistFound.isPresent()) {
             log.error("Playlist was not found.");
             throw new MusicOrPlaylistNotFoundException("Playlist with id " + playlistId + " not found");
         }
-        else{
-            log.info("Music added into the playlist.");
-            Playlist playlist =  playlistFound.get();
-            playlist.getMusics().add(music);
-            return playlistRepository.save(playlist);
+        return playlistFound.get();
+    }
+
+    private void isMusicExists(Music music) {
+        Optional<Music> musicFound = musicRepository.findById(music.getId());
+        if(!musicFound.isPresent()) {
+            log.error("Music was not found.");
+            throw new MusicOrPlaylistNotFoundException("Music with id " + music.getId() + " not found");
         }
     }
 }
