@@ -37,6 +37,7 @@ class PlaylistServiceTest {
     private static Set<Music> musics;
 
     private static Music m;
+
     @Mock
     private static Playlist playlist;
 
@@ -49,8 +50,6 @@ class PlaylistServiceTest {
 
         musics = new HashSet<>();
         musics.add(m);
-
-        playlist = new Playlist("30ab1678-c616-4314-adcc-918aff5a7a14");
     }
 
     @Test
