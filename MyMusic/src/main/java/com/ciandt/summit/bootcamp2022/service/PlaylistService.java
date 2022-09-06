@@ -2,6 +2,7 @@ package com.ciandt.summit.bootcamp2022.service;
 
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
+import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
@@ -24,6 +25,11 @@ public class PlaylistService implements IPlaylistService {
         isMusicExists(music);
 
         Playlist playlist = isPlaylistExists(playlistId);
+
+        if (playlist.getMusics().stream().anyMatch(musicIterator -> musicIterator.getId() == music.getId())) {
+            throw new MusicAlreadyInsidePlaylistException("Music already added into this playlist");
+        }
+
         playlist.getMusics().add(music);
 
         log.info("Music added into the playlist.");
