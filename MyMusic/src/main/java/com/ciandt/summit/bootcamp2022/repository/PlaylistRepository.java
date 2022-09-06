@@ -14,5 +14,5 @@ public interface PlaylistRepository extends JpaRepository<Playlist, String> {
 
     @Modifying
     @Query(value = "DELETE FROM PlaylistMusicas WHERE PlaylistId =:playlistId AND MusicaId =:musicId", nativeQuery = true)
-    void deleteMusicOfPlaylist(@Param("playlistId") String playlistId, @Param("musicId") String musicId);
+    Integer deleteMusicFromPlaylist(@Param("playlistId") String playlistId, @Param("musicId") String musicId);
 }
