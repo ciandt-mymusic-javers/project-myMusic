@@ -3,19 +3,25 @@ package com.ciandt.summit.bootcamp2022.service;
 import com.ciandt.summit.bootcamp2022.entity.Artist;
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
+import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,9 +51,12 @@ class PlaylistServiceTest {
 
         musics = new HashSet<>();
         musics.add(m);
+
+        playlist = new Playlist("30ab1678-c616-4314-adcc-918aff5a7a14");
     }
 
     @Test
+    @DisplayName("Return Music id not found when MusicOrPlaylistNotFoundException")
     void addMusicIntoPlaylistShouldReturnMusicOrPlaylistNotFoundExceptionWhenMusicNotFound() {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.empty());
@@ -61,6 +70,7 @@ class PlaylistServiceTest {
     }
 
     @Test
+    @DisplayName("Return Playlist id not found when PlaylistNotFoundException")
     void addMusicIntoPlaylistShouldReturnPlaylistNotFoundExceptionWhenPlaylistNotFound() {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
@@ -77,7 +87,21 @@ class PlaylistServiceTest {
     }
 
     @Test
+    @DisplayName("Should add music into playlist")
     void addMusicIntoPlaylistShouldAddMusic() {
+
+        when(musicRepository.findById(m.getId()))
+                .thenReturn(Optional.ofNullable(m));
+
+        when(playlistRepository.findById(PLAYLISTID))
+                .thenReturn(Optional.ofNullable(playlist));
+
+        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID));
+    }
+
+    @Test
+    @DisplayName("Return Music already added into this playlist when MusicAlreadyInsidePlaylistException")
+    void addMusicIntoPlaylistShouldReturnMusicAlreadyInsidePlaylistExceptionWhenMusicAlreadyInPlaylist() {
 
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
@@ -87,6 +111,11 @@ class PlaylistServiceTest {
 
         when(playlist.getMusics()).thenReturn(musics);
 
-        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID));
+        Exception exception = assertThrows(MusicAlreadyInsidePlaylistException.class,
+                () -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID)
+        );
+
+        assertEquals(
+                "Music already added into this playlist", exception.getMessage());
     }
 }
