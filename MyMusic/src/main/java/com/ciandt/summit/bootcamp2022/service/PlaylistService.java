@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 @Log4j2
 @Service
@@ -22,7 +23,7 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public Playlist addMusicIntoPlaylist(Music music, String playlistId){
-        isMusicExists(music);
+        isMusicExists(music.getId());
 
         Playlist playlist = isPlaylistExists(playlistId);
 
@@ -37,16 +38,17 @@ public class PlaylistService implements IPlaylistService {
         return playlistRepository.save(playlist);
     }
 
-    public Integer deleteMusicOfPlaylist(Music music, String playlistId) {
-        isMusicExists(music);
+    @Transactional
+    public void deleteMusicOfPlaylist(String musicId, String playlistId) {
+        isMusicExists(musicId);
 
         isPlaylistExists(playlistId);
 
-        String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, music.getId());
+        String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, musicId);
         if (musicIdFound == null) {
             throw new MusicNotFoundInsidePlaylistException("Music was not found inside playlist");
         }
-        return playlistRepository.deleteMusicOfPlaylist(playlistId, music.getId());
+        playlistRepository.deleteMusicOfPlaylist(playlistId, musicId);
     }
 
     private Playlist isPlaylistExists(String playlistId) {
@@ -58,11 +60,11 @@ public class PlaylistService implements IPlaylistService {
         return playlistFound.get();
     }
 
-    private void isMusicExists(Music music) {
-        Optional<Music> musicFound = musicRepository.findById(music.getId());
+    private void isMusicExists(String musicId) {
+        Optional<Music> musicFound = musicRepository.findById(musicId);
         if(!musicFound.isPresent()) {
             log.error("Music was not found.");
-            throw new MusicOrPlaylistNotFoundException("Music with id " + music.getId() + " not found");
+            throw new MusicOrPlaylistNotFoundException("Music with id " + musicId + " not found");
         }
     }
 }

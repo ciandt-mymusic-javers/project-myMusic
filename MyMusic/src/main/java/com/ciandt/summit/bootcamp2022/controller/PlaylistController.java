@@ -30,4 +30,12 @@ public class PlaylistController {
 
         return new ResponseEntity<>("Music successfully inserted into playlist", HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Remove music from playlist", description = "Remove music from a playlist")
+    @DeleteMapping("/{playlistId}/musics/{musicId}")
+    public ResponseEntity<?> deleteMusicFromPlaylist(@PathVariable String playlistId, @PathVariable String musicId){
+        playlistService.deleteMusicOfPlaylist(musicId, playlistId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
