@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 @Log4j2
 @Service
@@ -31,7 +32,8 @@ public class PlaylistService implements IPlaylistService {
         return playlistRepository.save(playlist);
     }
 
-    public Integer deleteMusicOfPlaylist(String musicId, String playlistId) {
+    @Transactional
+    public void deleteMusicOfPlaylist(String musicId, String playlistId) {
         isMusicExists(musicId);
 
         isPlaylistExists(playlistId);
@@ -40,7 +42,7 @@ public class PlaylistService implements IPlaylistService {
         if (musicIdFound == null) {
             throw new MusicNotFoundInsidePlaylistException("Music was not found inside playlist");
         }
-        return playlistRepository.deleteMusicOfPlaylist(playlistId, musicId);
+        playlistRepository.deleteMusicOfPlaylist(playlistId, musicId);
     }
 
     private Playlist isPlaylistExists(String playlistId) {

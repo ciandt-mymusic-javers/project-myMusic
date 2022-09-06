@@ -1,7 +1,6 @@
 package com.ciandt.summit.bootcamp2022.controller;
 
 import com.ciandt.summit.bootcamp2022.entity.Music;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.service.PlaylistService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +33,9 @@ public class PlaylistController {
 
     @Operation(summary = "Remove music from playlist", description = "Remove music from a playlist")
     @DeleteMapping("/{playlistId}/musics/{musicId}")
-    public ResponseEntity<Playlist> deleteMusicFromPlaylist(@PathVariable String playlistId, @PathVariable String musicId){
-        playlistService.deleteMusicOfPlaylist(playlistId,musicId);
+    public ResponseEntity<?> deleteMusicFromPlaylist(@PathVariable String playlistId, @PathVariable String musicId){
+        playlistService.deleteMusicOfPlaylist(musicId, playlistId);
 
-        return new ResponseEntity<Playlist>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
