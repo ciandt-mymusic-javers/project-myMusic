@@ -99,11 +99,9 @@ class PlaylistControllerTest {
 
     @Test
     @DisplayName("Delete music inside playlist should return HTTP.StatusCode.NOCONTENT")
-    void deleteMusicofPlaylist() throws Exception {
+    void deleteMusicFromPlaylistSuccess() throws Exception {
 
         String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
-
-        given(playlistService.deleteMusicFromPlaylist(anyString(), anyString())).willReturn(1);
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(url))
