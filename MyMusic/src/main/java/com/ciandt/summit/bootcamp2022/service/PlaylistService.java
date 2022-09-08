@@ -39,7 +39,7 @@ public class PlaylistService implements IPlaylistService {
     }
 
     @Transactional
-    public Integer deleteMusicFromPlaylist(String musicId, String playlistId) {
+    public void deleteMusicFromPlaylist(String musicId, String playlistId) {
         isMusicExists(musicId);
 
         isPlaylistExists(playlistId);
@@ -49,7 +49,7 @@ public class PlaylistService implements IPlaylistService {
             throw new MusicNotFoundInsidePlaylistException("Music was not found inside playlist");
         }
 
-        return playlistRepository.deleteMusicFromPlaylist(playlistId, musicId);
+        playlistRepository.deleteMusicFromPlaylist(playlistId, musicId);
     }
 
     private Playlist isPlaylistExists(String playlistId) {

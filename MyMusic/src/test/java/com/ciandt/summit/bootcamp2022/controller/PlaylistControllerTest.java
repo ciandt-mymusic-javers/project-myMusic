@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -113,8 +114,9 @@ class PlaylistControllerTest {
 
         String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
 
-        given(playlistService.deleteMusicFromPlaylist(anyString(), anyString()))
-                .willThrow(new MusicNotFoundInsidePlaylistException("Music was not found inside playlist"));
+        doThrow(new MusicNotFoundInsidePlaylistException("Music was not found inside playlist"))
+                .when(playlistService)
+                .deleteMusicFromPlaylist(anyString(), anyString());
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(url))
@@ -126,9 +128,11 @@ class PlaylistControllerTest {
     void deleteMusicFromPlaylistShouldReturnPlaylistNotFound() throws Exception {
 
         String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
+        String playlistId = "a39926f4-6acb-4497-884f-d4e5296ef652";
 
-        given(playlistService.deleteMusicFromPlaylist(anyString(), anyString()))
-                .willThrow(new MusicOrPlaylistNotFoundException("Not found"));
+        doThrow(new MusicNotFoundInsidePlaylistException("Playlist with id" + playlistId + " not found"))
+                .when(playlistService)
+                .deleteMusicFromPlaylist(anyString(), anyString());
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(url))
