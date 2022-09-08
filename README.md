@@ -15,7 +15,7 @@
 
 - [x] Allow users to fetch new songs from database
 - [x] Allow the users to choose the songs and add to their playlist
-- [ ] Allow users to remove songs from their playlist
+- [x] Allow users to remove songs from their playlist
 - [ ] Create premium and common user profile
 
 ## Business Rules
@@ -26,9 +26,26 @@
   - Music search should not be case sensitive
   - The search must return values containing the filter, not needing to inform the full name of the song or artist
   - The return must be sorted by artist name and then by song name
-- Allow the users to choose the songs and add to their playlist
+- Allow users to choose the songs and add to their playlist
   - It must receive a request containing the song identifier and the playlist identifier
   - It must validate if song identifier and playlist identifier exist
+- Allow user to remove musics from their playlist
+  - It should receive a request containing the song identifier and the playlist identifier
+  - It should validate if song identifier and playlist identifier exist
+
+
+## Technologies
+
+- Spring
+- Lombok
+- OpenAPI
+- Feign
+- SQLite
+- Caffeine
+- JUnit5
+- Mockito
+
+
 
 ## How to Install
 
