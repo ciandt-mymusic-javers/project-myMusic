@@ -34,7 +34,7 @@ public class PlaylistController {
     @Operation(summary = "Remove music from playlist", description = "Remove music from a playlist")
     @DeleteMapping("/{playlistId}/musics/{musicId}")
     public ResponseEntity<?> deleteMusicFromPlaylist(@PathVariable String playlistId, @PathVariable String musicId){
-        playlistService.deleteMusicOfPlaylist(musicId, playlistId);
+        playlistService.deleteMusicFromPlaylist(musicId, playlistId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
