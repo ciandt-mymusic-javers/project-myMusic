@@ -4,6 +4,7 @@ import com.ciandt.summit.bootcamp2022.entity.Artist;
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
+import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -104,7 +106,7 @@ class PlaylistServiceTest {
                 .thenReturn(Optional.ofNullable(m));
 
         when(playlistRepository.findById(PLAYLISTID))
-                .thenReturn(Optional.ofNullable(playlist));
+                .thenReturn(Optional.of(playlist));
 
         when(playlist.getMusics()).thenReturn(musics);
 
@@ -114,5 +116,52 @@ class PlaylistServiceTest {
 
         assertEquals(
                 "Music already added into this playlist", exception.getMessage());
+    }
+
+    @DisplayName("Should Return Exception Music not Found into Playlist")
+    void deleteMusicFromPlaylistShouldReturnExceptionMusicNotFoundIntoPlaylist() {
+        when(musicRepository.findById(m.getId()))
+                .thenReturn(Optional.ofNullable(m));
+
+        when(playlistRepository.findById(PLAYLISTID))
+                .thenReturn(Optional.of(playlist));
+
+        when(playlistRepository.findMusicIntoPlaylist(playlist.getId(), m.getId()))
+                .thenReturn(null);
+
+        Exception exception = assertThrows(MusicNotFoundInsidePlaylistException.class,
+                () -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID)
+        );
+        assertEquals(
+                "Music was not found inside playlist", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Return Music Id not found when Delete Music Or Playlist Not Found")
+    void deleteMusicIntoPlaylistShouldReturnMusicOrPlaylistNotFoundExceptionWhenMusicNotFound() {
+        when(musicRepository.findById(m.getId()))
+                .thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
+                () -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID)
+        );
+
+        assertEquals(
+                "Music with id " + m.getId() + " not found", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should Delete music from playlist")
+    void deleteMusicFromPlaylistWithSuccess() {
+        when(musicRepository.findById(m.getId()))
+                .thenReturn(Optional.ofNullable(m));
+
+        when(playlistRepository.findById(PLAYLISTID))
+                .thenReturn(Optional.ofNullable(playlist));
+
+        when(playlistRepository.findMusicIntoPlaylist(playlist.getId(), m.getId()))
+                .thenReturn(m.getId());
+
+        assertDoesNotThrow(() -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID));
     }
 }
