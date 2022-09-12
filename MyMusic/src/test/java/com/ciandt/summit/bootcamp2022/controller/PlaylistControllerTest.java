@@ -42,13 +42,7 @@ class PlaylistControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private PlaylistController playlistController;
-
-    private Playlist playlist;
-
     private Music music;
-
-    private static final String PLAYLISTID = "playlist00";
 
     @BeforeEach
     void initTest() {

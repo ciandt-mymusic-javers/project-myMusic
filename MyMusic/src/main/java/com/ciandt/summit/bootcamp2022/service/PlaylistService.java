@@ -27,7 +27,8 @@ public class PlaylistService implements IPlaylistService {
 
         Playlist playlist = isPlaylistExists(playlistId);
 
-        if (playlist.getMusics().stream().anyMatch(musicIterator -> musicIterator.getId() == music.getId())) {
+        String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, music.getId());
+        if (musicIdFound != null) {
             throw new MusicAlreadyInsidePlaylistException("Music already added into this playlist");
         }
 

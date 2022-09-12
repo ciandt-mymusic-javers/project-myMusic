@@ -26,4 +26,11 @@ public class Playlist implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "MusicaId")
     )
     private Set<Music> musics;
+
+    public Playlist(@NonNull String id, Set<Music> musics) {
+        this.id = id;
+        this.musics = musics;
+    }
 }
+
+

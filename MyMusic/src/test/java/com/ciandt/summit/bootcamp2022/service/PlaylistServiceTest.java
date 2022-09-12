@@ -21,8 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PlaylistServiceTest {
@@ -36,14 +35,11 @@ class PlaylistServiceTest {
     @Mock
     private MusicRepository musicRepository;
 
-    private static Set<Music> musics;
-
     private static Music m;
 
-    @Mock
-    private static Playlist playlist;
+    private static Playlist p;
 
-    private static final String PLAYLISTID = "playlist01";
+    static Set<Music> musics;
 
     @BeforeAll
     public static void init() {
@@ -52,6 +48,8 @@ class PlaylistServiceTest {
 
         musics = new HashSet<>();
         musics.add(m);
+
+        p = new Playlist("playlist01", musics);
     }
 
     @Test
@@ -61,7 +59,7 @@ class PlaylistServiceTest {
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID)
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
         );
 
         assertEquals(
@@ -74,15 +72,15 @@ class PlaylistServiceTest {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
 
-        when(playlistRepository.findById(PLAYLISTID))
+        when(playlistRepository.findById(p.getId()))
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID)
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
         );
 
         assertEquals(
-                "Playlist with id " + PLAYLISTID + " not found", exception.getMessage());
+                "Playlist with id " + p.getId() + " not found", exception.getMessage());
     }
 
     @Test
@@ -92,10 +90,13 @@ class PlaylistServiceTest {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
 
-        when(playlistRepository.findById(PLAYLISTID))
-                .thenReturn(Optional.ofNullable(playlist));
+        when(playlistRepository.findById(p.getId()))
+                .thenReturn(Optional.ofNullable(p));
 
-        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID));
+        when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
+                .thenReturn(null);
+
+        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, p.getId()));
     }
 
     @Test
@@ -105,32 +106,34 @@ class PlaylistServiceTest {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
 
-        when(playlistRepository.findById(PLAYLISTID))
-                .thenReturn(Optional.of(playlist));
+        when(playlistRepository.findById(p.getId()))
+                .thenReturn(Optional.ofNullable(p));
 
-        when(playlist.getMusics()).thenReturn(musics);
+        when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
+                .thenReturn(m.getId());
 
         Exception exception = assertThrows(MusicAlreadyInsidePlaylistException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, PLAYLISTID)
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
         );
 
         assertEquals(
                 "Music already added into this playlist", exception.getMessage());
     }
 
+    @Test
     @DisplayName("Should Return Exception Music not Found into Playlist")
     void deleteMusicFromPlaylistShouldReturnExceptionMusicNotFoundIntoPlaylist() {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
 
-        when(playlistRepository.findById(PLAYLISTID))
-                .thenReturn(Optional.of(playlist));
+        when(playlistRepository.findById(p.getId()))
+                .thenReturn(Optional.of(p));
 
-        when(playlistRepository.findMusicIntoPlaylist(playlist.getId(), m.getId()))
+        when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
                 .thenReturn(null);
 
         Exception exception = assertThrows(MusicNotFoundInsidePlaylistException.class,
-                () -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID)
+                () -> playlistService.deleteMusicFromPlaylist(m.getId(), p.getId())
         );
         assertEquals(
                 "Music was not found inside playlist", exception.getMessage());
@@ -143,7 +146,7 @@ class PlaylistServiceTest {
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
-                () -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID)
+                () -> playlistService.deleteMusicFromPlaylist(m.getId(), p.getId())
         );
 
         assertEquals(
@@ -156,12 +159,12 @@ class PlaylistServiceTest {
         when(musicRepository.findById(m.getId()))
                 .thenReturn(Optional.ofNullable(m));
 
-        when(playlistRepository.findById(PLAYLISTID))
-                .thenReturn(Optional.ofNullable(playlist));
+        when(playlistRepository.findById(p.getId()))
+                .thenReturn(Optional.ofNullable(p));
 
-        when(playlistRepository.findMusicIntoPlaylist(playlist.getId(), m.getId()))
+        when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
                 .thenReturn(m.getId());
 
-        assertDoesNotThrow(() -> playlistService.deleteMusicFromPlaylist(m.getId(), PLAYLISTID));
+        assertDoesNotThrow(() -> playlistService.deleteMusicFromPlaylist(m.getId(), p.getId()));
     }
 }
