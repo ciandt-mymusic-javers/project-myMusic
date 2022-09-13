@@ -21,10 +21,11 @@ public class PlaylistController {
     private final PlaylistService playlistService;
 
     @Operation(summary = "Add music to playlist", description = "endpoint to add a music to a playlist by id")
-    @PostMapping("/{playlistId}/musics")
+    @PostMapping("/{playlistId}/{userId}/musics")
     public ResponseEntity<String> addMusicIntoPlaylist(@PathVariable String playlistId,
+                                                       @PathVariable String userId,
                                                        @RequestBody @Valid Music music){
-        playlistService.addMusicIntoPlaylist(music, playlistId);
+        playlistService.addMusicIntoPlaylist(music, playlistId, userId);
 
         log.info("Endpoint to add music into playlist initialized.");
 
