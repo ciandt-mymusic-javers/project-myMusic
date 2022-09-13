@@ -160,6 +160,11 @@
 						<exclude>com/ciandt/summit/bootcamp2022/exception/**</exclude>
 						<exclude>com/ciandt/summit/bootcamp2022/interceptor/**</exclude>
 						<exclude>com/ciandt/summit/bootcamp2022/proxy/**</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/PlaylistRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserTypeRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IMusicService.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IPlaylistService.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>

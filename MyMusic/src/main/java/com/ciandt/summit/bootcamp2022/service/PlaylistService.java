@@ -42,9 +42,10 @@ public class PlaylistService implements IPlaylistService {
         }
 
         Optional<User> user = userRepository.findById(userId);
-        if(user.get().getUserTypeId().getDescricao().equalsIgnoreCase("comum"))
-            if(playlist.getMusics().size() >= 5)
-                throw new UserFreeMusicLimitExpection("You have reached the maximum number of songs in your playlist." +
+        if(user.isPresent())
+            if(user.get().getUserTypeId().getDescricao().equalsIgnoreCase("comum"))
+                if(playlist.getMusics().size() >= 5)
+                    throw new UserFreeMusicLimitExpection("You have reached the maximum number of songs in your playlist." +
                         " To add more songs, purchase the premium plan");
 
         playlist.getMusics().add(music);
