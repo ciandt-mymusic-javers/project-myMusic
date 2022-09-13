@@ -4,6 +4,7 @@ import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
+import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitExpection;
 import com.ciandt.summit.bootcamp2022.interceptor.TokenInterceptor;
 import com.ciandt.summit.bootcamp2022.service.PlaylistService;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,10 +54,27 @@ class PlaylistControllerTest {
     @DisplayName("Playlist not found should return HTTP.StatusCode.BAD_REQUEST")
     void addMusicIntoPlaylistNotFound() throws Exception {
 
-        given(playlistService.addMusicIntoPlaylist(Mockito.any(Music.class), anyString()))
+        given(playlistService.addMusicIntoPlaylist(Mockito.any(Music.class), anyString(), anyString()))
                 .willThrow(new MusicOrPlaylistNotFoundException("Not found"));
 
-        String url = "/api/v1/playlist/1/musics";
+        String url = "/api/v1/playlist/1/1/musics";
+
+        String body = String.valueOf(music);
+
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    void addMusicIntoPlaylistFreeLimitReached() throws Exception {
+
+        given(playlistService.addMusicIntoPlaylist(Mockito.any(Music.class), anyString(), anyString()))
+                .willThrow(new UserFreeMusicLimitExpection("You have reached the maximum number of songs in your playlist." +
+                        " To add more songs, purchase the premium plan"));
+
+        String url = "/api/v1/playlist/1/1/musics";
 
         String body = String.valueOf(music);
 
@@ -71,7 +89,7 @@ class PlaylistControllerTest {
     @DisplayName("Add music into playlist should return HTTP.StatusCode.OK")
     void addMusicIntoPlaylistSuccess() throws Exception {
 
-        String url = "/api/v1/playlist/1/musics";
+        String url = "/api/v1/playlist/1/1/musics";
 
         String body = "{\n" +
                 "     \"id\": \"4ffb5d4f-8b7f-4996-b84b-ecf75.1f52eea\",\n" +
