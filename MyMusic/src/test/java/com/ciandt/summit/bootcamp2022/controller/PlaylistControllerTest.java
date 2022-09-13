@@ -1,10 +1,9 @@
 package com.ciandt.summit.bootcamp2022.controller;
 
 import com.ciandt.summit.bootcamp2022.entity.Music;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
-import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitExpection;
+import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitException;
 import com.ciandt.summit.bootcamp2022.interceptor.TokenInterceptor;
 import com.ciandt.summit.bootcamp2022.service.PlaylistService;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +70,7 @@ class PlaylistControllerTest {
     void addMusicIntoPlaylistFreeLimitReached() throws Exception {
 
         given(playlistService.addMusicIntoPlaylist(Mockito.any(Music.class), anyString(), anyString()))
-                .willThrow(new UserFreeMusicLimitExpection("You have reached the maximum number of songs in your playlist." +
+                .willThrow(new UserFreeMusicLimitException("You have reached the maximum number of songs in your playlist." +
                         " To add more songs, purchase the premium plan"));
 
         String url = "/api/v1/playlist/1/1/musics";

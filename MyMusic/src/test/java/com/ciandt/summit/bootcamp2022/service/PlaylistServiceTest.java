@@ -4,7 +4,7 @@ import com.ciandt.summit.bootcamp2022.entity.*;
 import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
-import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitExpection;
+import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
 import com.ciandt.summit.bootcamp2022.repository.UserRepository;
@@ -128,7 +128,7 @@ class PlaylistServiceTest {
         when(playlistRepository.findById(anyString()))
                 .thenReturn(Optional.ofNullable(p));
 
-        UserFreeMusicLimitExpection exception = assertThrows(UserFreeMusicLimitExpection.class,
+        UserFreeMusicLimitException exception = assertThrows(UserFreeMusicLimitException.class,
                         () -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId()));
 
         assertEquals(

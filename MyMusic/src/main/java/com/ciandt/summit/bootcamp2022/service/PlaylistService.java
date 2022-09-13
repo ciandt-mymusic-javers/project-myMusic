@@ -6,7 +6,7 @@ import com.ciandt.summit.bootcamp2022.entity.User;
 import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
-import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitExpection;
+import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
 import com.ciandt.summit.bootcamp2022.repository.UserRepository;
@@ -45,7 +45,7 @@ public class PlaylistService implements IPlaylistService {
         if(user.isPresent()
                 && user.get().getUserTypeId().getDescricao().equalsIgnoreCase("comum")
                 && playlist.getMusics().size() >= 5)
-                    throw new UserFreeMusicLimitExpection("You have reached the maximum number" +
+                    throw new UserFreeMusicLimitException("You have reached the maximum number" +
                             " of songs in your playlist. To add more songs, purchase the premium plan");
 
         playlist.getMusics().add(music);
