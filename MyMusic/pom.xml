@@ -154,12 +154,17 @@
 				<configuration>
 					<excludes>
 						<exclude>com/ciandt/summit/bootcamp2022/SummitBootcampApplication.class</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/config/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/dto/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/entity/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/exception/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/interceptor/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/proxy/**</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/PlaylistRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserTypeRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IMusicService.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IPlaylistService.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/config/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/dto/security/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/entity/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/exception/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/interceptor/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/proxy/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
