@@ -1,7 +1,6 @@
 package com.ciandt.summit.bootcamp2022.controller;
 
 import com.ciandt.summit.bootcamp2022.entity.Music;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
 import com.ciandt.summit.bootcamp2022.interceptor.TokenInterceptor;
