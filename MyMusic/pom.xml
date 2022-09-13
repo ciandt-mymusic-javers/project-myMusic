@@ -101,7 +101,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>6.4.3</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -117,6 +121,11 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>6.4.3</version>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -149,10 +158,17 @@
 				<configuration>
 					<excludes>
 						<exclude>com/ciandt/summit/bootcamp2022/SummitBootcampApplication.class</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/config/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/dto/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/exception/**</exclude>
-						<exclude>com/ciandt/summit/bootcamp2022/interceptor/**</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/PlaylistRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/repository/UserTypeRepository.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IMusicService.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/service/IPlaylistService.class</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/config/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/dto/security/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/entity/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/exception/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/interceptor/*</exclude>
+						<exclude>com/ciandt/summit/bootcamp2022/proxy/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

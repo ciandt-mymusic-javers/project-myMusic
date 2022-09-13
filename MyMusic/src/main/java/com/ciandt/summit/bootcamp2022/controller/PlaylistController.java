@@ -21,13 +21,14 @@ public class PlaylistController {
     @Autowired
     private final PlaylistService playlistService;
 
-    @PostMapping("/{playlistId}/musics")
+    @PostMapping("/{playlistId}/{userId}/musics")
     @Operation(summary = "Add music to playlist", description = "Endpoint to add a music to a playlist by id")
     @ApiResponse(responseCode = "201", description = "Returns 'Music successfully inserted into playlist'")
     @ApiResponse(responseCode = "400", description = "Returns 'Music with id {} not found'")
     public ResponseEntity<String> addMusicIntoPlaylist(@PathVariable String playlistId,
+                                                       @PathVariable String userId,
                                                        @RequestBody @Valid Music music){
-        playlistService.addMusicIntoPlaylist(music, playlistId);
+        playlistService.addMusicIntoPlaylist(music, playlistId, userId);
 
         log.info("Endpoint to add music into playlist initialized.");
 

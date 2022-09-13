@@ -1,13 +1,13 @@
 package com.ciandt.summit.bootcamp2022.service;
 
-import com.ciandt.summit.bootcamp2022.entity.Artist;
-import com.ciandt.summit.bootcamp2022.entity.Music;
-import com.ciandt.summit.bootcamp2022.entity.Playlist;
+import com.ciandt.summit.bootcamp2022.entity.*;
 import com.ciandt.summit.bootcamp2022.exception.MusicAlreadyInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundInsidePlaylistException;
 import com.ciandt.summit.bootcamp2022.exception.MusicOrPlaylistNotFoundException;
+import com.ciandt.summit.bootcamp2022.exception.UserFreeMusicLimitException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import com.ciandt.summit.bootcamp2022.repository.PlaylistRepository;
+import com.ciandt.summit.bootcamp2022.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,9 +35,14 @@ class PlaylistServiceTest {
     @Mock
     private MusicRepository musicRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     private static Music m;
 
     private static Playlist p;
+
+    private static User u;
 
     static Set<Music> musics;
 
@@ -50,6 +55,8 @@ class PlaylistServiceTest {
         musics.add(m);
 
         p = new Playlist("playlist01", musics);
+
+        u = new User("user01", "User01", new UserType("userType", "comum"));
     }
 
     @Test
@@ -59,7 +66,7 @@ class PlaylistServiceTest {
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId())
         );
 
         assertEquals(
@@ -76,7 +83,7 @@ class PlaylistServiceTest {
                 .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(MusicOrPlaylistNotFoundException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId())
         );
 
         assertEquals(
@@ -96,7 +103,37 @@ class PlaylistServiceTest {
         when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
                 .thenReturn(null);
 
-        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, p.getId()));
+        when(userRepository.findById(u.getId()))
+                .thenReturn(Optional.ofNullable(u));
+
+        assertDoesNotThrow(() -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId()));
+    }
+
+    @Test
+    @DisplayName("Should ThrowUserFreeMusicLimitExpection")
+    void addMusicIntoPlaylistShouldThrowUserFreeMusicLimitExpection() {
+
+        when(musicRepository.findById(m.getId()))
+                .thenReturn(Optional.ofNullable(m));
+
+        when(playlistRepository.findMusicIntoPlaylist(p.getId(), m.getId()))
+                .thenReturn(null);
+
+        when(userRepository.findById(u.getId()))
+                .thenReturn(Optional.ofNullable(u));
+
+        for(int i = 0; i < 4; i++){
+            p.getMusics().add(new Music("4ffb5d4f-8b7f-4996-b84b-ecf751f52ee"+ i, "Leave the Door Open", m.getArtist()));
+        }
+        when(playlistRepository.findById(anyString()))
+                .thenReturn(Optional.ofNullable(p));
+
+        UserFreeMusicLimitException exception = assertThrows(UserFreeMusicLimitException.class,
+                        () -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId()));
+
+        assertEquals(
+                "You have reached the maximum number of songs in your playlist." +
+                " To add more songs, purchase the premium plan", exception.getMessage());
     }
 
     @Test
@@ -113,7 +150,7 @@ class PlaylistServiceTest {
                 .thenReturn(m.getId());
 
         Exception exception = assertThrows(MusicAlreadyInsidePlaylistException.class,
-                () -> playlistService.addMusicIntoPlaylist(m, p.getId())
+                () -> playlistService.addMusicIntoPlaylist(m, p.getId(), u.getId())
         );
 
         assertEquals(
