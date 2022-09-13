@@ -34,7 +34,7 @@ public class PlaylistService implements IPlaylistService {
 
         verifyMusic(music.getId());
 
-        Playlist playlist = isPlaylistExists(playlistId);
+        Playlist playlist = findPlaylist(playlistId);
 
         String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, music.getId());
         if (musicIdFound != null) {
@@ -59,7 +59,7 @@ public class PlaylistService implements IPlaylistService {
     public void deleteMusicFromPlaylist(String musicId, String playlistId) {
         verifyMusic(musicId);
 
-        isPlaylistExists(playlistId);
+        findPlaylist(playlistId);
 
         String musicIdFound = playlistRepository.findMusicIntoPlaylist(playlistId, musicId);
         if (musicIdFound == null) {
@@ -69,7 +69,7 @@ public class PlaylistService implements IPlaylistService {
         playlistRepository.deleteMusicFromPlaylist(playlistId, musicId);
     }
 
-    private Playlist isPlaylistExists(String playlistId) {
+    private Playlist findPlaylist(String playlistId) {
         Optional<Playlist> playlistFound = playlistRepository.findById(playlistId);
         if(!playlistFound.isPresent()) {
             log.error("Playlist was not found.");
