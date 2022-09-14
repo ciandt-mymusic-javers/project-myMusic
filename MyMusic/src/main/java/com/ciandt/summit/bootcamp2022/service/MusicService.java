@@ -6,7 +6,6 @@ import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundException;
 import com.ciandt.summit.bootcamp2022.repository.MusicRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
