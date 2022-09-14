@@ -16,9 +16,10 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("MyMusic API")
                         .description(
-                                "\"A new Spotify-like API. You are able to search " +
-                                        "for musics and artists as well as create new playlists\"")
+                                "A new Spotify-like API. You are able to search " +
+                                        "for musics and artists as well as create new playlists")
                         .version("1.0.0")
                 );
     }
+
 }
