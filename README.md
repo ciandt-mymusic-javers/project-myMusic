@@ -16,7 +16,7 @@
 - [x] Allow users to fetch new songs from database
 - [x] Allow the users to choose the songs and add to their playlist
 - [x] Allow users to remove songs from their playlist
-- [ ] Create premium and common user profile
+- [x] Create premium and common user profile
 
 ## Business Rules
 
@@ -32,6 +32,11 @@
 - Allow user to remove musics from their playlist
   - It should receive a request containing the song identifier and the playlist identifier
   - It should validate if song identifier and playlist identifier exist
+- Create premium and common user profile
+  - User entity must be created
+  - Premium users can add unlimited songs to any playlist
+  - Common type users can add a maximum of 5 songs to their playlist and if they reach the maximum amount of music, an error with the message "You have reached the maximum number of songs in your playlist. To add more songs, contract the Premium plan.", must be returned
+
 
 
 ## Technologies
@@ -44,6 +49,7 @@
 - Caffeine
 - JUnit5
 - Mockito
+- Flyway
 
 
 
