@@ -44,7 +44,6 @@ public class MusicControllerTest {
     public void init()  {
         Artist artist = new Artist("30ab1678-c616-4314-adcc-918aff5a7a13", "Nickelback");
         music = new Music("4ffb5d4f-8b7f-4996-b84b-ecf751f52eea", "Photograph", artist);
-
     }
 
     @BeforeEach
