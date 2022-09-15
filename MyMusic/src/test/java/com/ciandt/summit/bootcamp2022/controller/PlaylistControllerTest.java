@@ -56,7 +56,7 @@ class PlaylistControllerTest {
         given(playlistService.addMusicIntoPlaylist(Mockito.any(Music.class), anyString(), anyString()))
                 .willThrow(new MusicOrPlaylistNotFoundException("Not found"));
 
-        String url = "/api/v1/playlist/1/1/musics";
+        String url = "/api/v1/playlists/1/1/musics";
 
         String body = String.valueOf(music);
 
@@ -73,7 +73,7 @@ class PlaylistControllerTest {
                 .willThrow(new UserFreeMusicLimitException("You have reached the maximum number of songs in your playlist." +
                         " To add more songs, purchase the premium plan"));
 
-        String url = "/api/v1/playlist/1/1/musics";
+        String url = "/api/v1/playlists/1/1/musics";
 
         String body = String.valueOf(music);
 
@@ -88,7 +88,7 @@ class PlaylistControllerTest {
     @DisplayName("Add music into playlist should return HTTP.StatusCode.OK")
     void addMusicIntoPlaylistSuccess() throws Exception {
 
-        String url = "/api/v1/playlist/1/1/musics";
+        String url = "/api/v1/playlists/1/1/musics";
 
         String body = "{\n" +
                 "     \"id\": \"4ffb5d4f-8b7f-4996-b84b-ecf75.1f52eea\",\n" +
@@ -112,7 +112,7 @@ class PlaylistControllerTest {
     @DisplayName("Delete music inside playlist should return HTTP.StatusCode.NOCONTENT")
     void deleteMusicFromPlaylistSuccess() throws Exception {
 
-        String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
+        String url = "/api/v1/playlists/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
 
         mvc.perform(MockMvcRequestBuilders
                         .delete(url))
@@ -123,7 +123,7 @@ class PlaylistControllerTest {
     @DisplayName("Music not found inside the playlist")
     void deleteMusicFromPlaylistShouldReturnMusicNotFoundInsidePlaylist() throws Exception {
 
-        String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
+        String url = "/api/v1/playlists/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
 
         doThrow(new MusicNotFoundInsidePlaylistException("Music was not found inside playlist"))
                 .when(playlistService)
@@ -138,7 +138,7 @@ class PlaylistControllerTest {
     @DisplayName("PLaylist not found")
     void deleteMusicFromPlaylistShouldReturnPlaylistNotFound() throws Exception {
 
-        String url = "/api/v1/playlist/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
+        String url = "/api/v1/playlists/a39926f4-6acb-4497-884f-d4e5296ef652/musics/5101bd14-32f3-4e65-8503-dea6464af059";
         String playlistId = "a39926f4-6acb-4497-884f-d4e5296ef652";
 
         doThrow(new MusicNotFoundInsidePlaylistException("Playlist with id" + playlistId + " not found"))
