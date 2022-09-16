@@ -2,10 +2,7 @@ package com.ciandt.summit.bootcamp2022.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Getter
@@ -21,7 +18,8 @@ public class UserType implements Serializable {
     @NonNull
     private String id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Descricao")
     @NonNull
-    private String descricao;
+    private ERole description;
 }

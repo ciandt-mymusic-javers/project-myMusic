@@ -5,6 +5,7 @@ import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.exception.InvalidFilterSizeException;
 import com.ciandt.summit.bootcamp2022.exception.MusicNotFoundException;
 import com.ciandt.summit.bootcamp2022.interceptor.TokenInterceptor;
+import com.ciandt.summit.bootcamp2022.security.service.UserDetailsServiceImpl;
 import com.ciandt.summit.bootcamp2022.service.MusicService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +17,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -33,10 +37,13 @@ public class MusicControllerTest {
     private MusicService musicService;
 
     @MockBean
-    private TokenInterceptor tokenInterceptor;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private WebApplicationContext context;
 
     private Music music;
 
@@ -48,7 +55,12 @@ public class MusicControllerTest {
 
     @BeforeEach
     void initTest() {
-        given(tokenInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
+            mvc = MockMvcBuilders
+                    .webAppContextSetup(context)
+                    .apply(springSecurity())
+                    .build();
+
     }
 
     @Test

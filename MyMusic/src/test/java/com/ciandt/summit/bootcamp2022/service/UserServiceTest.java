@@ -1,5 +1,6 @@
 package com.ciandt.summit.bootcamp2022.service;
 
+import com.ciandt.summit.bootcamp2022.entity.ERole;
 import com.ciandt.summit.bootcamp2022.entity.User;
 import com.ciandt.summit.bootcamp2022.entity.UserType;
 import com.ciandt.summit.bootcamp2022.exception.UserNotFoundException;
@@ -29,7 +30,7 @@ public class UserServiceTest {
 
     @BeforeAll
     public static void init() {
-        UserType userType = new UserType("2", "Premium");
+        UserType userType = new UserType("2", ERole.PREMIUM);
         user = new User("1", "Maria", userType);
     }
 

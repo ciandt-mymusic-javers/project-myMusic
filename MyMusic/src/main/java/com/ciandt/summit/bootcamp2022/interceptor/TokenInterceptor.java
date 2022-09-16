@@ -20,20 +20,22 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
 
-        //Replace with getSession after authentication implementation
+        String url = request.getRequestURI();
         String name = request.getHeader("name");
         String token = request.getHeader("token");
+        if(url.contains("signin")) {
+            try {
+                tokenProviderProxy.tokenAuthorizer(new CreateAuthorizerRequest(new CreateAuthorizerRequestData(name, token)));
 
-        try {
-            tokenProviderProxy.tokenAuthorizer(new CreateAuthorizerRequest(new CreateAuthorizerRequestData(name, token)));
+                return true;
 
-            return true;
+            } catch (Exception e) {
+                e.printStackTrace();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            throw new UserUnauthorizedException("We are sorry but we are not able to authenticate you. You have to subscribe " +
-                    "to access this resource. If you are already subscribed, check if you gave the proper credential in the login step");
+                throw new UserUnauthorizedException("We are sorry but we are not able to authenticate you. You have to subscribe " +
+                        "to access this resource. If you are already subscribed, check if you gave the proper credential in the login step");
+            }
         }
+        return true;
     }
 }

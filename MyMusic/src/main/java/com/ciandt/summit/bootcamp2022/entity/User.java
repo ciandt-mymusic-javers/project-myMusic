@@ -20,16 +20,16 @@ public class User implements Serializable {
 
     @Column(name = "Nome")
     @NonNull
-    private String nome;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "PlaylistId",
             referencedColumnName = "Id")
-    private Playlist playlistId;
+    private Playlist playlist;
 
     @ManyToOne
     @JoinColumn(name = "TipoUsuarioId",
             referencedColumnName = "Id")
     @NonNull
-    private UserType userTypeId;
+    private UserType userType;
 }

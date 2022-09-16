@@ -56,7 +56,7 @@ class PlaylistServiceTest {
 
         p = new Playlist("playlist01", musics);
 
-        u = new User("user01", "User01", new UserType("userType", "comum"));
+        u = new User("user01", "User01", new UserType("userType", ERole.BASIC));
     }
 
     @Test

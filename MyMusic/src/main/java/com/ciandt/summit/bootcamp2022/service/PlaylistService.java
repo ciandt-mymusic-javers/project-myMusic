@@ -1,5 +1,6 @@
 package com.ciandt.summit.bootcamp2022.service;
 
+import com.ciandt.summit.bootcamp2022.entity.ERole;
 import com.ciandt.summit.bootcamp2022.entity.Music;
 import com.ciandt.summit.bootcamp2022.entity.Playlist;
 import com.ciandt.summit.bootcamp2022.entity.User;
@@ -43,7 +44,7 @@ public class PlaylistService implements IPlaylistService {
 
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()
-                && user.get().getUserTypeId().getDescricao().equalsIgnoreCase("comum")
+                && user.get().getUserType().getDescription().getRole().equalsIgnoreCase(ERole.BASIC.getRole())
                 && playlist.getMusics().size() >= 5)
                     throw new UserFreeMusicLimitException("You have reached the maximum number" +
                             " of songs in your playlist. To add more songs, purchase the premium plan");
